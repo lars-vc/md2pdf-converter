@@ -1,5 +1,7 @@
 import re
 import argparse
+import subprocess
+import os
 
 
 def parseLine(line):
@@ -69,8 +71,12 @@ def convert(file, output, author, ct, nonums):
     pdf += "\\newpage\n"
     pdf += aftertext
     pdf += "\\end{document}"
-    with open(output, "w") as f:
+    with open(output+".tex", "w") as f:
         f.write(pdf)
+    subprocess.run(['pdflatex', '-interaction=nonstopmode','-quiet', output+".tex"])
+    os.remove(output+".aux")
+    os.remove(output+".log")
+    os.remove(output+".out")
 
 
 if __name__ == "__main__":
