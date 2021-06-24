@@ -25,12 +25,13 @@ def convert(file):
     aftertext = ""
     with open(file, "r") as f:
         currentListDepth = -1
+        currentList = []
         line = f.readline()
         while line != "":
             if not re.match(r"^ *[*-+] .*$", line) and currentListDepth != -1:
                 while currentListDepth != -1:
+                    aftertext += "\\end{itemize}\n" 
                     currentListDepth -= 1
-                    aftertext += "\\end{itemize}\n"
 
             if re.match(r"^# .*$", line):
                 title = line[2:-1]
@@ -46,7 +47,7 @@ def convert(file):
                     aftertext += "\\begin{itemize}\n"
                     currentListDepth += 1
                 elif spaces/2 < currentListDepth:
-                    aftertext += "\\end{itemize}\n"
+                    aftertext += "\\end{itemize}\n" 
                     currentListDepth -= 1
 
                 aftertext += "\\item "+ line[spaces+2:]
